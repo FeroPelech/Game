@@ -8,7 +8,10 @@ window.addEventListener("load", function () {
     constructor(game) {
       this.game = game;
       window.addEventListener("keydown", (e) => {
-        console.log(e.key);
+        if (e.key === "ArrowUp") {
+          this.game.keys.push(e.key);
+        }
+        console.log(this.game.keys);
       });
     }
   }
@@ -38,8 +41,9 @@ window.addEventListener("load", function () {
     constructor(width, height) {
       this.width = width;
       this.height = height;
-      this.player = new Player(); //this inside ? ()
-      this.input = new InputHandler();
+      this.player = new Player(this);
+      this.input = new InputHandler(this);
+      this.keys = [];
     }
     update() {
       this.player.update();
