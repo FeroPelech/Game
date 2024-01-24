@@ -8,7 +8,10 @@ window.addEventListener("load", function () {
     constructor(game) {
       this.game = game;
       window.addEventListener("keydown", (e) => {
-        if (e.key === "ArrowUp" && this.game.keys.indexOf(e.key) === -1) {
+        if (
+          (e.key === "ArrowUp" || e.key === "ArrowDown") &&
+          this.game.keys.indexOf(e.key) === -1
+        ) {
           this.game.keys.push(e.key);
         }
         console.log(this.game.keys);
@@ -30,8 +33,16 @@ window.addEventListener("load", function () {
       this.x = 20;
       this.y = 100;
       this.speedY = 0;
+      this.maxSpeed = 2;
     }
     update() {
+      if (this.game.keys.includes("ArrowUp")) {
+        this.speedY = -1;
+      } else if (this.game.keys.includes("ArrowDown")) {
+        this.speedY = 1;
+      } else {
+        this.speedY = 0;
+      }
       this.y += this.speedY;
     }
     draw(context) {
