@@ -107,6 +107,15 @@ window.addEventListener("load", function () {
       context.fillRect(this.x, this.y, this.width, this.height);
     }
   }
+
+  class Angler1 extends Enemy {
+    constructor(game) {
+      super(game);
+      this.width = 228 * 0.2;
+      this.height = 169 * 0.2;
+      this.y = Math.random() * (this.game.height * 0.9 - this.height);
+    }
+  }
   class Layer {}
   class Background {}
   class UI {
@@ -133,10 +142,14 @@ window.addEventListener("load", function () {
       this.input = new InputHandler(this);
       this.ui = new UI(this);
       this.keys = [];
+      this.enemies = [];
+      this.enemyTimer = 0;
+      this.enemyInterval = 1000;
       this.ammo = 20;
       this.maxAmmo = 50;
       this.ammoTimer = 0;
       this.ammoInterval = 500;
+      this.gameOver = false;
     }
     update(deltaTime) {
       this.player.update();
@@ -148,10 +161,26 @@ window.addEventListener("load", function () {
       } else {
         this.ammoTimer += deltaTime;
       }
+      this.enemies.forEach((e) => {
+        e.update();
+      });
+      this.enemies = this.enemies.filter((enemy) => !enemy.markedForDeletion);
+      if (this.enemyTimer > this.enemyInterval && !this.gameOver) {
+        this.addEnemy();
+        this.enemyTimer = 0;
+      } else {
+        this.enemyTimer += deltaTime;
+      }
     }
     draw(context) {
       this.player.draw(context);
       this.ui.draw(context);
+      this.enemies.forEach((e) => {
+        e.draw(context);
+      });
+    }
+    addEnemy() {
+      this.enemies.push(new Angler1(this));
     }
   }
 
